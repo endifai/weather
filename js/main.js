@@ -13,21 +13,25 @@ window.addEventListener('load', function(){
             const proxy = 'https://cors-anywhere.herokuapp.com/';
             const url = `${proxy}https://api.darksky.net/forecast/761b184bec728109e5925a117cd0d984/${latitude},${longitude}`;
             
-            async function getData (){
+            const getData = async () => {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                locationTimezone.innerHTML = data.timezone;
-                temperatureValue.innerHTML = data.currently.temperature.toFixed(0);
-                weatherDescription.innerHTML = data.currently.summary;
-                let date = new Date();
-                locationDate.innerHTML = `${date.getHours()}:${date.getMinutes()}`;
-
-                let iconID = data.currently.icon;
-                setIcon(iconID, weatherIcon);
+                return data;
             };
 
-            getData();
+            getData()
+                .then( data => {
+                    locationTimezone.innerHTML = data.timezone;
+                    temperatureValue.innerHTML = data.currently.temperature.toFixed(0);
+                    weatherDescription.innerHTML = data.currently.summary;
+                    let date = new Date();
+                    locationDate.innerHTML = `${date.getHours()}:${date.getMinutes()}`;
+
+                    let iconID = data.currently.icon;
+                    setIcon(iconID, weatherIcon);
+            })
+            ;
         })
     } else {
         throw new Error('Разрешите браузеру доступ к вашему расположению и перезагрузите страницу');
